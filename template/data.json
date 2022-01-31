@@ -1,0 +1,49 @@
+{
+  "name": "sample",
+  "version": "1.0.0",
+  "page": {
+    "size": "A4",
+    "margin": "2cm"
+  },
+  "pageFooter": "Text rodapé",
+  "pageTitle": "Modelo de relatorio dinâmico",
+  "table": [
+      {
+          "code": 1,
+          "name": "sample 1",
+          "value": "toot"
+      },
+      {
+          "code": 2,
+          "name": "sample 2",
+          "value": "toot"
+      },
+      {
+          "code": 3,
+          "name": "sample 3",
+          "value": "toot"
+      }
+  ],
+  "data": [
+    {
+      "title": "123",
+      "done": true
+    },
+    {
+      "title": "456",
+      "done": true
+    },
+    {
+      "title": "789",
+      "done": false
+    },
+    {
+      "title": "098",
+      "done": true
+    },
+    {
+      "title": "765",
+      "done": false
+    }
+  ]
+}

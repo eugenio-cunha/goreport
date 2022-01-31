@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playground</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.min.js"
+        integrity="sha512-hDyKEpCc9jPn3u2VffFjScCtNqZI+BAbThAhhDYqqqZbxMqmTSNIgdU0OU9BRD/8wFxHIWLAo561hh9fW7j6sA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/mode-html.min.js"
+        integrity="sha512-vSQkVhmiIt31RHmh8b65o0ap3yoL08VJ6MeuiCGo+92JDdSSWAEWoWELEf3WBk4e2tz/0CvnTe87Y2rFrNjcbg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/mode-json.min.js"
+        integrity="sha512-tw7dwP1FWNLISF1EQN2Qa0xhLU1Uyf0+F9A/kIBNtP7oCVBAj7tEJhcOh8yVUAbbVYYsi6Bd9BjYCCy8AxVc8A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/theme-monokai.min.js"
+        integrity="sha512-wZYGbdk0giM73l8BLDNfSEziApAmH8DvXey6zNLG3QUgDeDsMAPm3FIdjhLwrGOWO0vdVHkVxeUzOBR0Hc/xBA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        .editor {
+            width: 100%;
+            height: 90vh;
+        }
+
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        /* Split the screen in half */
+        .split {
+            height: 100%;
+            width: 50%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            overflow-x: hidden;
+            padding-top: 0px;
+        }
+
+        /* Control the left side */
+        .left {
+            left: 0;
+            background-color: #111;
+        }
+
+        /* Control the right side */
+        .right {
+            right: 0;
+            background-color: #ccc;
+        }
+
+        /* If you want the content centered horizontally and vertically */
+        .centered {
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="split left">
+        <div class="centered">
+            <div class="tab">
+                <button class="tablinks" onclick="openEditor(event, 'tab_header')">CABEÇALHO</button>
+                <button class="tablinks" onclick="openEditor(event, 'tab_body')" id="defaultOpen">CORPO</button>
+                <button class="tablinks" onclick="openEditor(event, 'tab_footer')">RODAPÉ</button>
+                <button class="tablinks" onclick="openEditor(event, 'tab_data')">DADOS</button>
+                <button class="tablinks" onclick="preview()">PREVIEW</button>
+            </div>
+
+            <!-- Tab content -->
+            <div id="tab_header" class="tabcontent">
+                <div class="editor" id="header"></div>
+            </div>
+
+            <div id="tab_body" class="tabcontent">
+                <div class="editor" id="body"></div>
+            </div>
+
+            <div id="tab_footer" class="tabcontent">
+                <div class="editor" id="footer"></div>
+            </div>
+
+            <div id="tab_data" class="tabcontent">
+                <div class="editor" id="data"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="split right">
+        <div class="centered">
+            <iframe type="application/pdf" style="height: 100vh;"
+                src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://infolab.stanford.edu/pub/papers/google.pdf#toolbar=0&scrollbar=0"
+                frameBorder="0" scrolling="auto" height="100%" width="100%"></iframe>
+        </div>
+    </div>
+
+    <script>
+        const HtmlMode = ace.require("ace/mode/html").Mode;
+        const JsonMode = ace.require("ace/mode/json").Mode;
+
+        const header = ace.edit("header");
+        header.setTheme("ace/theme/monokai");
+        header.session.setMode(new HtmlMode());
+
+        const body = ace.edit("body");
+        body.setTheme("ace/theme/monokai");
+        body.session.setMode(new HtmlMode());
+
+        const footer = ace.edit("footer");
+        footer.setTheme("ace/theme/monokai");
+        footer.session.setMode(new HtmlMode());
+
+        const data = ace.edit("data");
+        data.setTheme("ace/theme/monokai");
+        data.session.setMode(new JsonMode());
+
+        document.getElementById("defaultOpen").click();
+
+        function openEditor(evt, name) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(name).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        async function preview() {
+            const payload = {
+                // header: btoa(header.getValue()),
+                // body:   btoa(body.getValue()),
+                // footer: btoa(footer.getValue()),
+                // data:   btoa(data.getValue()),
+                header: header.getValue(),
+                body:   body.getValue(),
+                footer: footer.getValue(),
+                data:   data.getValue(),
+            }
+
+            const res = await window.fetch('http://localhost:8080/report', {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'POST',
+                body: JSON.stringify(payload),
+                cache: 'default'
+            })
+            const blob = await res.blob()
+            let blobURL = URL.createObjectURL(blob);
+            document.querySelector("iframe").src = blobURL;
+        }
+    </script>
+</body>
+
+</html>
