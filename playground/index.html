@@ -18,77 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/theme-monokai.min.js"
         integrity="sha512-wZYGbdk0giM73l8BLDNfSEziApAmH8DvXey6zNLG3QUgDeDsMAPm3FIdjhLwrGOWO0vdVHkVxeUzOBR0Hc/xBA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        .editor {
-            width: 100%;
-            height: 90vh;
-        }
-
-        /* Style the tab */
-        .tab {
-            overflow: hidden;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-        }
-
-        /* Style the buttons that are used to open the tab content */
-        .tab button {
-            background-color: inherit;
-            float: left;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 14px 16px;
-            transition: 0.3s;
-        }
-
-        /* Change background color of buttons on hover */
-        .tab button:hover {
-            background-color: #ddd;
-        }
-
-        /* Create an active/current tablink class */
-        .tab button.active {
-            background-color: #ccc;
-        }
-
-        /* Style the tab content */
-        .tabcontent {
-            display: none;
-            padding: 6px 12px;
-            border: 1px solid #ccc;
-            border-top: none;
-        }
-
-        /* Split the screen in half */
-        .split {
-            height: 100%;
-            width: 50%;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            overflow-x: hidden;
-            padding-top: 0px;
-        }
-
-        /* Control the left side */
-        .left {
-            left: 0;
-            background-color: #111;
-        }
-
-        /* Control the right side */
-        .right {
-            right: 0;
-            background-color: #ccc;
-        }
-
-        /* If you want the content centered horizontally and vertically */
-        .centered {
-            top: 0;
-            left: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="static/style.css">
 </head>
 
 <body>
@@ -128,75 +58,7 @@
                 frameBorder="0" scrolling="auto" height="100%" width="100%"></iframe>
         </div>
     </div>
-
-    <script>
-        const HtmlMode = ace.require("ace/mode/html").Mode;
-        const JsonMode = ace.require("ace/mode/json").Mode;
-
-        const header = ace.edit("header");
-        header.setTheme("ace/theme/monokai");
-        header.session.setMode(new HtmlMode());
-
-        const body = ace.edit("body");
-        body.setTheme("ace/theme/monokai");
-        body.session.setMode(new HtmlMode());
-
-        const footer = ace.edit("footer");
-        footer.setTheme("ace/theme/monokai");
-        footer.session.setMode(new HtmlMode());
-
-        const data = ace.edit("data");
-        data.setTheme("ace/theme/monokai");
-        data.session.setMode(new JsonMode());
-
-        document.getElementById("defaultOpen").click();
-
-        function openEditor(evt, name) {
-            // Declare all variables
-            var i, tabcontent, tablinks;
-
-            // Get all elements with class="tabcontent" and hide them
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-
-            // Get all elements with class="tablinks" and remove the class "active"
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-
-            // Show the current tab, and add an "active" class to the button that opened the tab
-            document.getElementById(name).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-
-        async function preview() {
-            const payload = {
-                // header: btoa(header.getValue()),
-                // body:   btoa(body.getValue()),
-                // footer: btoa(footer.getValue()),
-                // data:   btoa(data.getValue()),
-                header: header.getValue(),
-                body:   body.getValue(),
-                footer: footer.getValue(),
-                data:   data.getValue(),
-            }
-
-            const res = await window.fetch('http://localhost:8080/report', {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                method: 'POST',
-                body: JSON.stringify(payload),
-                cache: 'default'
-            })
-            const blob = await res.blob()
-            let blobURL = URL.createObjectURL(blob);
-            document.querySelector("iframe").src = blobURL;
-        }
-    </script>
+    <script type="text/javascript" src="static/index.js" ></script>
 </body>
 
 </html>

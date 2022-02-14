@@ -99,11 +99,14 @@ func report(c *gin.Context) {
 }
 
 func main() {
-	r := gin.Default()
-	r.LoadHTMLFiles("./playground/index.html")
-	r.POST("/report", report)
-	r.GET("/", func(c *gin.Context) {
+	router := gin.Default()
+
+	router.StaticFS("/static", http.Dir("./playground/static"))
+	router.LoadHTMLFiles("./playground/index.html")
+	router.POST("/report", report)
+	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
-	r.Run()
+
+	router.Run()
 }
